@@ -1,1 +1,1 @@
-CREATE DATABASE dbName;
+CREATE DATABASE disaster;
