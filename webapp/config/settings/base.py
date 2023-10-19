@@ -37,7 +37,9 @@ DJANGO_APPS = [
 ]
 
 PACKAGE_APPS = [
-
+    'drf_yasg',
+    'rest_framework',
+    'jazzmin',
 ]
 
 PROJECT_APPS = [
