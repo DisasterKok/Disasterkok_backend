@@ -33,7 +33,7 @@ docker exec -it nginx-dev-container nginx -s reload
 ### Build for Dev
 
 ```
-docker-compuse up -d --build
+docker-compose up -d --build
 ```
 
 ### Build for Production
