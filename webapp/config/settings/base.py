@@ -10,6 +10,7 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/4.0/ref/settings/
 """
 import os
+from datetime import timedelta
 from pathlib import Path
 
 PROJECT_DIR = Path(__file__).resolve().parent.parent.parent
@@ -34,12 +35,14 @@ DJANGO_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'user',
 ]
 
 PACKAGE_APPS = [
     'drf_yasg',
     'rest_framework',
     'jazzmin',
+    'rest_framework_simplejwt',
 ]
 
 PROJECT_APPS = [
@@ -106,6 +109,23 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
+REST_FRAMEWORK = {
+    'DATETIME_FORMAT': "%Y-%m-%d / %H:%M:%S",
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework_simplejwt.authentication.JWTAuthentication',
+    ),
+}
+
+REST_USE_JWT = True
+
+SIMPLE_JWT = {
+                 'ACCESS_TOKEN_LIFETIME': timedelta(days=14),
+                 'REFRESH_TOKEN_LIFETIME': timedelta(days=31),
+                 'ROTATE_REFRESH_TOKENS': False,
+                 'BLACKLIST_AFTER_ROTATION': True,
+                 'TOKEN_USER_CLASS': 'user.User',
+}
+
 # Internationalization
 # https://docs.djangoproject.com/en/4.0/topics/i18n/
 
@@ -127,3 +147,4 @@ STATIC_ROOT = 'static/'
 # https://docs.djangoproject.com/en/4.0/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
