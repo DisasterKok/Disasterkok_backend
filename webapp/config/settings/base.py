@@ -119,11 +119,11 @@ REST_FRAMEWORK = {
 REST_USE_JWT = True
 
 SIMPLE_JWT = {
-                 'ACCESS_TOKEN_LIFETIME': timedelta(days=14),
-                 'REFRESH_TOKEN_LIFETIME': timedelta(days=31),
-                 'ROTATE_REFRESH_TOKENS': False,
-                 'BLACKLIST_AFTER_ROTATION': True,
-                 'TOKEN_USER_CLASS': 'user.User',
+    'ACCESS_TOKEN_LIFETIME': timedelta(days=14),
+    'REFRESH_TOKEN_LIFETIME': timedelta(days=31),
+    'ROTATE_REFRESH_TOKENS': False,
+    'BLACKLIST_AFTER_ROTATION': True,
+    'TOKEN_USER_CLASS': 'user.User',
 }
 
 # Internationalization
@@ -148,3 +148,4 @@ STATIC_ROOT = 'static/'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
+AUTH_USER_MODEL = 'user.User'
