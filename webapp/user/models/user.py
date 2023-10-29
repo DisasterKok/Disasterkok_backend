@@ -1,0 +1,86 @@
+from django.db import models
+from django.contrib.auth.models import AbstractUser, BaseUserManager, PermissionsMixin
+
+
+class UserManager(BaseUserManager):
+    def _create_user(self, username, email, password, **kwargs):
+        # if not username:
+        #     raise ValueError('username is required')
+        # if not email:
+        #     raise ValueError('email is required')
+        user = self.model(
+            username=username,
+            email=self.normalize_email(email),
+            **kwargs,
+        )
+        user.set_password(password)
+        user.save()
+
+    def create_user(self, username, email, password, **kwargs):
+        self._create_user(username, email, password, **kwargs)
+
+    def create_superuser(self, username, email, password, **kwargs):
+        kwargs.setdefault('is_superuser', True)
+        self._create_user(username, email, password, **kwargs)
+
+
+class User(AbstractUser, PermissionsMixin):
+    class Meta:
+        db_table = 'user'
+        verbose_name = 'User'
+        verbose_name_plural = 'Users'
+
+    USERNAME_FIELD = 'username'
+    REQUIRED_FIELDS = ['email']
+
+    username = models.CharField(
+        verbose_name='유저 아이디',
+        unique=True,
+        max_length=20,
+        null=False,
+        blank=False,
+    )
+
+    kakaoId = models.CharField(
+        verbose_name='카카오 아이디',
+        unique=True,
+        max_length=225,
+        null=True,
+        blank=True,
+    )
+
+    naverId = models.CharField(
+        verbose_name='네이버 아이디',
+        unique=True,
+        max_length=225,
+        null=True,
+        blank=True,
+    )
+
+    email = models.EmailField(
+        max_length=100,
+        unique=True
+    )
+
+    # is_admin = models.BooleanField(default=False)
+
+    # is_superuser = models.BooleanField(default=False)
+
+    objects = UserManager()
+
+    def __str__(self):
+        if self.kakaoId:
+            return f"(카카오) {self.username}"
+        elif self.naverId:
+            return f"(네이버) {self.username}"
+        return f"(일반) {self.username}"
+
+    # def has_perm(self, perm, obj=None):
+    #     return True
+    #
+    # def has_module_perms(self, app_label):
+    #     return True
+
+    @property
+    def is_staff(self):
+        return self.is_superuser
