@@ -29,24 +29,21 @@ ALLOWED_HOSTS = ['*']
 # Application definition
 
 DJANGO_APPS = [
+    'jazzmin',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'user',
 ]
 
 PACKAGE_APPS = [
-    'drf_yasg',
-    'rest_framework',
-    'jazzmin',
     'rest_framework_simplejwt',
 ]
 
 PROJECT_APPS = [
-
+    'user',
 ]
 
 INSTALLED_APPS = DJANGO_APPS + PACKAGE_APPS + PROJECT_APPS
@@ -113,6 +110,7 @@ REST_FRAMEWORK = {
     'DATETIME_FORMAT': "%Y-%m-%d / %H:%M:%S",
     'DEFAULT_AUTHENTICATION_CLASSES': (
         'rest_framework_simplejwt.authentication.JWTAuthentication',
+        'rest_framework.authentication.SessionAuthentication',
     ),
 }
 
@@ -131,7 +129,7 @@ SIMPLE_JWT = {
 
 LANGUAGE_CODE = 'en-us'
 
-TIME_ZONE = 'UTC'
+TIME_ZONE = 'Asia/Seoul'
 
 USE_I18N = True
 
