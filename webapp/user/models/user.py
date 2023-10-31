@@ -62,6 +62,22 @@ class User(AbstractUser, PermissionsMixin):
         unique=True
     )
 
+    nickname = models.CharField(
+        max_length=30,
+        null=True,
+        blank=True,
+    )
+
+    created_at = models.DateTimeField(
+        verbose_name='생성 일시',
+        auto_now_add=True,
+    )
+
+    updated_at = models.DateTimeField(
+        verbose_name='수정 일시',
+        auto_now=True,
+    )
+
     # is_admin = models.BooleanField(default=False)
 
     # is_superuser = models.BooleanField(default=False)
