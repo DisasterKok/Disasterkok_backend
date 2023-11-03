@@ -7,7 +7,6 @@ from user.serializers import LoginSerializer
 
 class LoginAPIView(APIView):
     def post(self, request):
-        print(request.data)
         user = authenticate(
             username=request.data.get('username'),
             password=request.data.get('password')
