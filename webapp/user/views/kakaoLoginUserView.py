@@ -33,11 +33,10 @@ def kakaoCallback(request):
         'redirect_uri': os.environ.get("KAKAO_REDIRECT_URL"),
         'code': code,
     }
-    # headers = {
-    #     'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8',
-    # }
-    # token_response = requests.post(url, data=data, headers=headers)
-    token_response = requests.post(url, data=data)
+    headers = {
+        'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8',
+    }
+    token_response = requests.post(url, data=data, headers=headers)
     access_token = token_response.json().get('access_token')
 
     headers = {
@@ -46,7 +45,6 @@ def kakaoCallback(request):
     }
     profile_request = requests.get('https://kapi.kakao.com/v2/user/me', headers=headers)
     profile_json = profile_request.json()
-    # print("profile_json: " + profile_json)
     kakaoId = profile_json.get('id')
     username = profile_json['properties']['nickname']
 
