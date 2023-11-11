@@ -89,4 +89,4 @@ def naverCallback(request):
                         "access": str(refresh.access_token),
                     }
                     return Response(data, status=status.HTTP_200_OK)
-    return Response(status=status.HTTP_400_BAD_REQUEST)
+    return Response({"message": "naver에서 정보를 불러오지 못했습니다."}, status=status.HTTP_400_BAD_REQUEST)
