@@ -36,48 +36,54 @@ def kakaoCallback(request):
     headers = {
         'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8',
     }
-    token_response = requests.post(url, data=data, headers=headers)
-    access_token = token_response.json().get('access_token')
 
-    headers = {
-        'Authorization': f'Bearer {access_token}',
-        'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8',
-    }
-    profile_request = requests.get('https://kapi.kakao.com/v2/user/me', headers=headers)
-    profile_json = profile_request.json()
-    kakaoId = profile_json.get('id')
-    username = profile_json['properties']['nickname']
+    token_request = requests.post(url, data=data, headers=headers)
+    token_json = token_request.json()
 
-    if kakaoId is not None:
-        if User.objects.filter(kakaoId=kakaoId).exists():
-            user = User.objects.get(kakaoId=kakaoId)
-            refresh = RefreshToken.for_user(user)
-            data = {
-                "user": {
-                    "id": user.id,
-                    "kakaoId": user.kakaoId,
-                    "username": user.username,
-                },
-                "token": {
-                    "access": f"{str(refresh.access_token)}",
-                    "refresh": f"{str(refresh)}"
+    if 'access_token' in token_json:
+        access_token = token_json["access_token"]
+        # access_token = token_response.json().get('access_token')
+        url = "https://kapi.kakao.com/v2/user/me"
+        headers = {
+            'Authorization': f'Bearer {access_token}',
+            'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8',
+        }
+        profile_request = requests.get(url, headers=headers)
+        profile_json = profile_request.json()
+
+        kakaoId = profile_json.get('id')
+        username = profile_json['properties']['nickname']
+
+        if kakaoId is not None:
+            if User.objects.filter(kakaoId=kakaoId).exists():
+                user = User.objects.get(kakaoId=kakaoId)
+                refresh = RefreshToken.for_user(user)
+                data = {
+                    "user": {
+                        "id": user.id,
+                        "kakaoId": user.kakaoId,
+                        "username": user.username,
+                    },
+                    "token": {
+                        "access": f"{str(refresh.access_token)}",
+                        "refresh": f"{str(refresh)}"
+                    }
                 }
-            }
-            return Response(data, status=status.HTTP_200_OK)
-        else:
-            User(kakaoId=kakaoId, username=username).save()
-            user = User.objects.get(kakaoId=kakaoId)
-            refresh = RefreshToken.for_user(user)
-            data = {
-                "user": {
-                    "id": user.id,
-                    "kakaoId": user.kakaoId,
-                    "username": user.username,
-                },
-                "token": {
-                    "access": f"{str(refresh.access_token)}",
-                    "refresh": f"{str(refresh)}"
+                return Response(data, status=status.HTTP_200_OK)
+            else:
+                User(kakaoId=kakaoId, username=username).save()
+                user = User.objects.get(kakaoId=kakaoId)
+                refresh = RefreshToken.for_user(user)
+                data = {
+                    "user": {
+                        "id": user.id,
+                        "kakaoId": user.kakaoId,
+                        "username": user.username,
+                    },
+                    "token": {
+                        "access": f"{str(refresh.access_token)}",
+                        "refresh": f"{str(refresh)}"
+                    }
                 }
-            }
-            return Response(data, status=status.HTTP_200_OK)
-    return Response(status=status.HTTP_400_BAD_REQUEST)
+                return Response(data, status=status.HTTP_200_OK)
+    return Response({"message": "kakao에서 정보를 불러오지 못했습니다."}, status=status.HTTP_400_BAD_REQUEST)
