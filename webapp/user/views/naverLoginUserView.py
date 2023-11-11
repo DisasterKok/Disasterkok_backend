@@ -23,12 +23,13 @@ def naverLogin(request):
 @api_view(["GET"])
 @permission_classes([AllowAny])
 def naverCallback(request):
-    CLIENT_ID = os.environ.get("NAVER_CLIENT_ID")
-    CLIENT_SECRET = os.environ.get("NAVER_SECRET")
-    STATE = "RANDOM_STATE"
-    CODE = request.GET.get("code")
+    client_id = os.environ.get("NAVER_CLIENT_ID")
+    client_secret = os.environ.get("NAVER_SECRET")
+    # state = "RANDOM_STATE"
+    state = request.GET.get("state")
+    code = request.GET.get("code")
 
-    if CODE is None:
+    if code is None:
         raise Exception("code is None")
 
     redirect_uri = os.environ.get("NAVER_REDIRECT_URL")
@@ -36,11 +37,11 @@ def naverCallback(request):
 
     data = {
         'grant_type': 'authorization_code',
-        'client_id': CLIENT_ID,
-        'client_secret': CLIENT_SECRET,
+        'client_id': client_id,
+        'client_secret': client_secret,
         'redirect_uri': redirect_uri,
-        'code': CODE,
-        'state': STATE,
+        'code': code,
+        'state': state,
     }
 
     token_request = requests.post(url, data=data)
