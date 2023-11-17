@@ -37,10 +37,10 @@ DJANGO_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
 ]
-
 PACKAGE_APPS = [
     'drf_yasg',
     'rest_framework',
+    'rest_framework.authtoken',
     'rest_framework_simplejwt',
     'rest_framework_simplejwt.token_blacklist',
 ]
@@ -125,6 +125,10 @@ REST_FRAMEWORK = {
     'CSRF_HEADER_NAME': 'HTTP_X_CSRFTOKEN',
 }
 
+AUTHENTICATION_BACKENDS = [
+    'django.contrib.auth.backends.ModelBackend',
+]
+
 REST_USE_JWT = True
 
 SIMPLE_JWT = {
@@ -183,4 +187,4 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 AUTH_USER_MODEL = 'user.User'
 
-
+SITE_ID = 1
