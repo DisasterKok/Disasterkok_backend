@@ -38,9 +38,17 @@ class User(AbstractUser, PermissionsMixin):
     username = models.CharField(
         verbose_name='유저 아이디',
         unique=True,
-        max_length=20,
+        max_length=40,
         null=False,
         blank=False,
+    )
+
+    googleID = models.CharField(
+        verbose_name='구글 아이디',
+        unique=True,
+        max_length=225,
+        null=True,
+        blank=True,
     )
 
     kakaoId = models.CharField(
