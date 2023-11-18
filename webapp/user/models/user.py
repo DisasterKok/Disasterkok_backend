@@ -67,6 +67,14 @@ class User(AbstractUser, PermissionsMixin):
         blank=True,
     )
 
+    googleID = models.CharField(
+        verbose_name='구글 아이디',
+        unique=True,
+        max_length=225,
+        null=True,
+        blank=True,
+    )
+
     email = models.EmailField(
         max_length=100,
         unique=True
