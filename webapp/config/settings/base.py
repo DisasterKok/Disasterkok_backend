@@ -54,6 +54,7 @@ PACKAGE_APPS = [
 
 PROJECT_APPS = [
     'user',
+    'notification',
 ]
 
 INSTALLED_APPS = DJANGO_APPS + PACKAGE_APPS + PROJECT_APPS
