@@ -54,6 +54,7 @@ PACKAGE_APPS = [
 
 PROJECT_APPS = [
     'user',
+    'notification',
 ]
 
 INSTALLED_APPS = DJANGO_APPS + PACKAGE_APPS + PROJECT_APPS
@@ -197,8 +198,3 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 AUTH_USER_MODEL = 'user.User'
 
 SITE_ID = 1
-
-# ACCOUNT_USER_MODEL_USERNAME_FIELD = 'username' # username 필드 사용 o
-# ACCOUNT_EMAIL_REQUIRED = True            # email 필드 사용 o
-# ACCOUNT_USERNAME_REQUIRED = False        # username 필드 사용 x
-# ACCOUNT_AUTHENTICATION_METHOD = 'email'
