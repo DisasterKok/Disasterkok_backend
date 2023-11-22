@@ -1,6 +1,10 @@
 from django.urls import path, include
-from post.views import *
+from rest_framework.routers import DefaultRouter
+from post.views.postDetailViewSet import PostDetailViewSet
+
+router = DefaultRouter()
+router.register('post', PostDetailViewSet)
 
 urlpatterns = [
-    # path("create/", CreatePostAPIView.as_view()), # post - 게시글 작성
+    path('', include(router.urls)),
 ]
