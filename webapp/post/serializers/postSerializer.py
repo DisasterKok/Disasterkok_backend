@@ -1,13 +1,7 @@
 from post.models import Post, PostImage
+from post.serializers.postImageSerializer import PostImageSerializer
 from user.serializers import userSerializer
 from rest_framework import serializers
-
-class PostImageSerializer(serializers.ModelSerializer):
-    image = serializers.FileField(use_url=True)
-
-    class Meta:
-        model = PostImage
-        fields = ['image']
 
 class PostSerializer(serializers.ModelSerializer):
     user = userSerializer
