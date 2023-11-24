@@ -2,7 +2,7 @@ from django.db import models
 from post.models import Post
 
 def image_upload_path(instance, filename):
-    return f'media/posts/{instance.post.id}/{filename}/%Y/%m/%d'
+    return f'media/posts/{instance.post.id}/{filename}'
 
 class PostImage(models.Model):
     post = models.ForeignKey(Post, on_delete=models.CASCADE, related_name='image')
