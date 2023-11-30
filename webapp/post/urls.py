@@ -8,3 +8,6 @@ router.register('post', PostViewSet)
 urlpatterns = [
     path('', include(router.urls)),
 ]
+
+# post-list: /posts/post/ ({'get': 'list', 'post': 'create'})
+# post-detail: /posts/post/<pk>/ ({'get': 'retrieve', 'put': 'update', 'patch': 'partial_update', 'delete': 'destroy'})
