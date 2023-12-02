@@ -4,8 +4,10 @@ from user.serializers import userSerializer
 from rest_framework import serializers
 
 class PostSerializer(serializers.ModelSerializer):
-    user = userSerializer
+    user = serializers.SerializerMethodField()
     image = PostImageSerializer(many=True, read_only=True)
+    def get_user(self, obj):
+        return str(obj.user)
 
     def get_image(self, obj):
         image = obj.image.all()
@@ -22,6 +24,14 @@ class PostSerializer(serializers.ModelSerializer):
             'created_at',
             'image',
         ]
+
+    # def to_representation(self, instance):
+    #     data = super().to_representation(instance)
+    #     if self.context['request'].method == 'GET':
+    #         # Serialize user as a string
+    #         data['user'] = str(instance.user)
+    #     return data
+
 
     def create(self, validated_data):
         posts = Post.objects.create(**validated_data)
