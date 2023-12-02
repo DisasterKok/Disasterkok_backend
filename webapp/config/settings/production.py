@@ -15,3 +15,6 @@ DATABASES = (
         }
     }
 )
+
+# STATIC_ROOT = PROJECT_DIR / 'static'
+# MEDIA_ROOT = PROJECT_DIR / 'media'
