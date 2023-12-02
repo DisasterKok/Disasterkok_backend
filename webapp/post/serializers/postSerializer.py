@@ -25,14 +25,6 @@ class PostSerializer(serializers.ModelSerializer):
             'image',
         ]
 
-    # def to_representation(self, instance):
-    #     data = super().to_representation(instance)
-    #     if self.context['request'].method == 'GET':
-    #         # Serialize user as a string
-    #         data['user'] = str(instance.user)
-    #     return data
-
-
     def create(self, validated_data):
         posts = Post.objects.create(**validated_data)
         img_set = self.context['request'].FILES
