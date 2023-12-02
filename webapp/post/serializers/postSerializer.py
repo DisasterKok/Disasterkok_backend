@@ -20,8 +20,6 @@ class PostSerializer(serializers.ModelSerializer):
             'title',
             'content',
             'created_at',
-            'view',
-            'like',
             'image',
         ]
 
