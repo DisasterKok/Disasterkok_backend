@@ -36,18 +36,27 @@ class Region(models.Model):
     )
 
     address = models.TextField(
-        null=False,
+        null=True,
     )
 
     roadAdress = models.CharField(
-        null=False,
+        null=True,
     )
 
     zoneCode = models.CharField(
-        null=False,
+        null=True,
     )
 
+    xCoordinate = models.CharField(
+        null=True,
+    )
+
+    yCoordinate = models.CharField(
+        null=True,
+    )
+    
     aliasType = models.CharField(
         choices=ALIASTYPE_CATEGORY_CHOICES,
-        null=False,
+        null=True,
     )
+
