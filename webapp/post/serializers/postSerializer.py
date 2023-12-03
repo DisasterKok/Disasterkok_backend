@@ -1,18 +1,18 @@
 from post.models import Post, PostImage
 from post.serializers.postImageSerializer import PostImageSerializer
-from user.serializers import userSerializer
 from rest_framework import serializers
 
 class PostSerializer(serializers.ModelSerializer):
+    images = serializers.SerializerMethodField()
     user = serializers.SerializerMethodField()
-    image = PostImageSerializer(many=True, read_only=True)
+    # view = ViewSerializer(many=True, read_only=True)
+    # like = LikeSerializer(many=True, read_only=True)
+    def get_images(self, obj):
+        images = obj.image.all()
+        return PostImageSerializer(instance=images, many=True, context=self.context).data
+
     def get_user(self, obj):
         return str(obj.user)
-
-    def get_image(self, obj):
-        image = obj.image.all()
-        serializer = PostImageSerializer(image, many=True, context=self.context)
-        return serializer.data
 
     class Meta:
         model = Post
@@ -22,13 +22,16 @@ class PostSerializer(serializers.ModelSerializer):
             'title',
             'content',
             'created_at',
-            'image',
+            # 'view',
+            # 'like',
+            'images',
+            'is_anonymous',
         ]
 
     def create(self, validated_data):
-        posts = Post.objects.create(**validated_data)
+        instance = Post.objects.create(**validated_data)
         img_set = self.context['request'].FILES
-        for img in img_set.getlist('image'):
-            PostImage.objects.create(post=posts, image=img)
-        return posts
+        for img_data in img_set.getlist('image'):
+            PostImage.objects.create(post=instance, image=img_data)
+        return instance
 
