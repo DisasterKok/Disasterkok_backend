@@ -23,6 +23,8 @@ schema_view = get_schema_view(
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('users/', include('user.urls')),
+    path('notifications/', include('notification.urls')),
+    path('regions/', include('region.urls')),
     path('posts/', include('post.urls')),
 ]
 
