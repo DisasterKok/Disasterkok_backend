@@ -8,6 +8,7 @@ class Post(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     view = models.IntegerField(default=0)
     like = models.IntegerField(default=0)
+    is_anonymous = models.BooleanField(default=False)
 
     def __str__(self):
         return self.title

@@ -1,4 +1,4 @@
-from rest_framework.permissions import IsAdminUser, IsAuthenticated, IsAuthenticatedOrReadOnly
+from rest_framework.permissions import IsAdminUser, IsAuthenticated, IsAuthenticatedOrReadOnly, AllowAny
 from rest_framework.viewsets import ModelViewSet
 
 from post.models import Post
@@ -16,5 +16,9 @@ class PostViewSet(ModelViewSet):
 
         if self.action in ['update', 'retrieve']:
             permission_classes = [IsAdminUser]
+        elif self.action in ['create']:
+            permission_classes = [IsAuthenticated]
+        elif self.action in ['list']:
+            permission_classes = [AllowAny]
 
         return [permission() for permission in permission_classes]
