@@ -6,7 +6,7 @@ class PostSerializer(serializers.ModelSerializer):
     images = serializers.SerializerMethodField()
     user = serializers.SerializerMethodField()
     like = serializers.SerializerMethodField(read_only=True)
-    # view = ViewSerializer(many=True, read_only=True)
+    view = serializers.SerializerMethodField(read_only=True)
     def get_images(self, obj):
         images = obj.image.all()
         return PostImageSerializer(instance=images, many=True, context=self.context).data
@@ -17,6 +17,9 @@ class PostSerializer(serializers.ModelSerializer):
     def get_like(self, obj):
         return obj.like
 
+    def get_view(self, obj):
+        return obj.view
+
     class Meta:
         model = Post
         fields = [
@@ -25,7 +28,7 @@ class PostSerializer(serializers.ModelSerializer):
             'title',
             'content',
             'created_at',
-            # 'view',
+            'view',
             'like',
             'images',
             'is_anonymous',
