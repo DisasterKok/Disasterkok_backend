@@ -16,20 +16,6 @@ class PostViewSet(ModelViewSet):
     queryset = Post.objects.all()
     serializer_class = PostSerializer
     pagination_class = PageNumberPagination
-    permission_classes = [
-        IsAuthenticatedOrReadOnly,
-    ]
-    def get_permissions(self):
-        permission_classes = []
-
-        if self.action in ['update', 'retrieve']:
-            permission_classes = [IsAdminUser]
-        elif self.action in ['create']:
-            permission_classes = [IsAuthenticated]
-        elif self.action in ['list']:
-            permission_classes = [AllowAny]
-
-        return [permission() for permission in permission_classes]
 
     def retrieve(self, request, pk=None):
         post = get_object_or_404(self.get_queryset(), pk=pk)
