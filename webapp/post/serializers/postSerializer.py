@@ -2,6 +2,9 @@ from post.models import Post, PostImage
 from post.serializers.postImageSerializer import PostImageSerializer
 from rest_framework import serializers
 
+from user.models import User
+
+
 class PostSerializer(serializers.ModelSerializer):
     images = serializers.SerializerMethodField()
     user = serializers.CharField(source='user.username')
@@ -32,8 +35,9 @@ class PostSerializer(serializers.ModelSerializer):
         ]
 
     def create(self, validated_data):
-        user = validated_data.pop('user', None)
-        instance = Post.objects.create(user=user, **validated_data)
+        username = validated_data.pop('user')['username']
+        user_instance = User.objects.get(username=username)
+        instance = Post.objects.create(user=user_instance, **validated_data)
         img_set = self.context['request'].FILES
         for img_data in img_set.getlist('image'):
             PostImage.objects.create(post=instance, image=img_data)
