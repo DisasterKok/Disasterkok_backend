@@ -7,7 +7,7 @@ from user.models import User
 
 class PostSerializer(serializers.ModelSerializer):
     images = serializers.SerializerMethodField()
-    user = serializers.CharField(source='user.username')
+    user = serializers.CharField(source='user.username', required=False)
     like = serializers.SerializerMethodField(read_only=True)
     view = serializers.SerializerMethodField(read_only=True)
     def get_images(self, obj):
@@ -35,9 +35,15 @@ class PostSerializer(serializers.ModelSerializer):
         ]
 
     def create(self, validated_data):
-        username = validated_data.pop('user')['username']
-        user_instance = User.objects.get(username=username)
-        instance = Post.objects.create(user=user_instance, **validated_data)
+        user_data = validated_data.pop('user', None)
+
+        if user_data and 'username' in user_data:
+            username = user_data['username']
+            user_instance, created = User.objects.get_or_create(username=username)
+            validated_data['user'] = user_instance
+
+        instance = Post.objects.create(**validated_data)
+
         img_set = self.context['request'].FILES
         for img_data in img_set.getlist('image'):
             PostImage.objects.create(post=instance, image=img_data)
