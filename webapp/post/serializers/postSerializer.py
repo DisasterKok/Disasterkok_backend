@@ -4,15 +4,12 @@ from rest_framework import serializers
 
 class PostSerializer(serializers.ModelSerializer):
     images = serializers.SerializerMethodField()
-    user = serializers.SerializerMethodField()
+    user = serializers.CharField(source='user.username')
     like = serializers.SerializerMethodField(read_only=True)
     view = serializers.SerializerMethodField(read_only=True)
     def get_images(self, obj):
         images = obj.image.all()
         return PostImageSerializer(instance=images, many=True, context=self.context).data
-
-    def get_user(self, obj):
-        return str(obj.user)
 
     def get_like(self, obj):
         return obj.like
@@ -35,7 +32,8 @@ class PostSerializer(serializers.ModelSerializer):
         ]
 
     def create(self, validated_data):
-        instance = Post.objects.create(**validated_data)
+        user = validated_data.pop('user', None)
+        instance = Post.objects.create(user=user, **validated_data)
         img_set = self.context['request'].FILES
         for img_data in img_set.getlist('image'):
             PostImage.objects.create(post=instance, image=img_data)
