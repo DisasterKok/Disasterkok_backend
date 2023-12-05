@@ -3,7 +3,6 @@ import datetime
 from django.shortcuts import get_object_or_404
 from django.utils import timezone
 from rest_framework.pagination import PageNumberPagination
-from rest_framework.permissions import IsAdminUser, IsAuthenticated, IsAuthenticatedOrReadOnly, AllowAny
 from rest_framework.response import Response
 from rest_framework.status import HTTP_200_OK
 from rest_framework.viewsets import ModelViewSet
