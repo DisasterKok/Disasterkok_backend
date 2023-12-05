@@ -13,3 +13,12 @@ class Notification(models.Model):
         on_delete=models.CASCADE
     )
 
+    natural_disaster = models.TextField(
+        default='',
+        null=False,
+    )
+
+    social_disaster = models.TextField(
+        default='',
+        null=False,
+    )

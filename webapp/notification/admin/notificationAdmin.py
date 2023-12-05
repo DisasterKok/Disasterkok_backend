@@ -7,5 +7,7 @@ from notification.models import Notification
 class NotificationAdmin(admin.ModelAdmin):
     list_display = (
         'id',
-        'user'
+        'user',
+        'natural_disaster',
+        'social_disaster',
     )
