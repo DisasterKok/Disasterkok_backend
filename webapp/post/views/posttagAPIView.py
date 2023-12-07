@@ -1,5 +1,5 @@
 import re
-
+from post.disasterTag import disaster_to_word_mapping
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
@@ -15,10 +15,11 @@ class PostTagAPIView(APIView):
         pattern = re.compile(r'\b(\w+)(?:을|를|이|가)\s+\w+\b')
         matches = pattern.findall(title)
         matches_set = set(matches)
+
         tag = []
         for element in matches_set:
-            if element in disaster:
-                tag.append(element)
-        serializer =PostTagSerializer({'tags': tag})
-        return Response(serializer.data, status=200)
+            related_disasters = disaster_to_word_mapping.get(element, [])
+            tag.extend(related_disasters)
+
+        return Response({"tags": tag}, status=200)
 
