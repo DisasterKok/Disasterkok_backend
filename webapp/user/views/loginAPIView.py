@@ -5,6 +5,8 @@ from rest_framework.views import APIView
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 from rest_framework.response import Response
 from django.contrib.auth import authenticate
+
+from region.models import Region
 from user.serializers import LoginSerializer
 
 @permission_classes([AllowAny])
@@ -19,6 +21,12 @@ class LoginAPIView(APIView):
             token = TokenObtainPairSerializer.get_token(user)
             refresh_token = str(token)
             access_token = str(token.access_token)
+            regions = Region.objects.filter(notification__user=request.user.id)
+            if regions:
+                exist = True
+            else:
+                exist = False
+
             res = Response(
                 {
                     "user": serializer.data,
@@ -27,6 +35,7 @@ class LoginAPIView(APIView):
                         "access": access_token,
                         "refresh": refresh_token,
                     },
+                    "exist": exist
                 },
                 status=status.HTTP_200_OK,
             )
