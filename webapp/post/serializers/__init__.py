@@ -1,2 +1,3 @@
 from .postSerializer import PostSerializer
 from .postImageSerializer import PostImageSerializer
+from .posttagserializer import PostTagSerializer
