@@ -1,13 +1,13 @@
-from post.models import Post, PostImage
+from post.models import Post, PostImage, PostTag, Tag
 from post.serializers.postImageSerializer import PostImageSerializer
 from rest_framework import serializers
-
 
 class PostSerializer(serializers.ModelSerializer):
     images = serializers.SerializerMethodField()
     user = serializers.SerializerMethodField()
     like = serializers.SerializerMethodField(read_only=True)
     view = serializers.SerializerMethodField(read_only=True)
+    tags = serializers.ListSerializer(child=serializers.CharField(max_length=10), required=False)
 
     def get_images(self, obj):
         images = obj.image.all()
@@ -34,12 +34,19 @@ class PostSerializer(serializers.ModelSerializer):
             'like',
             'images',
             'is_anonymous',
+            'tags',
         ]
 
     def create(self, validated_data):
         validated_data['user'] = self.context['request'].user
+        tag_set = validated_data.pop('tags', [])
         posts = Post.objects.create(**validated_data)
+
         img_set = self.context['request'].FILES
         for img in img_set.getlist('image'):
             PostImage.objects.create(post=posts, image=img)
+
+        for tag in tag_set:
+            tag_instance, _ = Tag.objects.get_or_create(name=tag)
+            PostTag.objects.create(post=posts, tag=tag_instance)
         return posts
