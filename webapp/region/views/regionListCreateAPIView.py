@@ -1,3 +1,4 @@
+from django.db.models import QuerySet
 from rest_framework.generics import ListCreateAPIView
 from rest_framework.response import Response
 
@@ -9,7 +10,18 @@ from region.serializers import RegionSerializer
 class RegionListCreateAPIView(ListCreateAPIView):
     queryset = Region.objects.all()
     serializer_class = RegionSerializer
+    def get_queryset(self):
+        assert self.queryset is not None, (
+                "'%s' should either include a `queryset` attribute, "
+                "or override the `get_queryset()` method."
+                % self.__class__.__name__
+        )
 
+        queryset = self.queryset
+        if isinstance(queryset, QuerySet):
+            notification, created = Notification.objects.get_or_create(user=self.request.user)
+            queryset = queryset.filter(notification=notification)
+        return queryset
     def list(self, request, *args, **kwargs):
         queryset = self.filter_queryset(self.get_queryset())
         serializer = self.get_serializer(queryset, many=True)
