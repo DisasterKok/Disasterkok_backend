@@ -39,7 +39,7 @@ class Region(models.Model):
         null=True,
     )
 
-    roadAdress = models.CharField(
+    roadAddress = models.CharField(
         null=True,
     )
 

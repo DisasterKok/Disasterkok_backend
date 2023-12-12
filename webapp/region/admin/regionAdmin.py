@@ -12,7 +12,7 @@ class RegionAdmin(admin.ModelAdmin):
         'onOff',
         'name',
         'address',
-        'roadAdress',
+        'roadAddress',
         'zoneCode',
         'xCoordinate',
         'yCoordinate',

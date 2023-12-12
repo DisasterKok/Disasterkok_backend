@@ -15,7 +15,7 @@ class RegionRetrieveSerializer(serializers.ModelSerializer):
             'onOff',
             'default',
             'address',
-            'roadAdress',
+            'roadAddress',
             'zoneCode',
             'xCoordinate',
             'yCoordinate',

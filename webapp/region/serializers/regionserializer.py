@@ -12,7 +12,7 @@ class RegionSerializer(serializers.ModelSerializer):
             'onOff',
             'name',
             'address',
-            'roadAdress',
+            'roadAddress',
             'zoneCode',
             'xCoordinate',
             'yCoordinate',
