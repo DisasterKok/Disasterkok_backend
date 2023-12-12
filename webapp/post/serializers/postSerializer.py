@@ -38,20 +38,11 @@ class PostSerializer(serializers.ModelSerializer):
         ]
 
     def create(self, validated_data):
-        # Extract tags from validated data
-        tag_set = validated_data.pop('tags', [])
-
-        # Create the Post instance
+        tag_set = self.initial_data.getlist('tags')
         post = Post.objects.create(**validated_data)
-
-        # Get image set from request
         img_set = self.context['request'].FILES.getlist('image')
-
-        # Create PostImage instances
         for img in img_set:
             PostImage.objects.create(post=post, image=img)
-
-        # Create PostTag instances
         for tag in tag_set:
             tag_instance, _ = Tag.objects.get_or_create(name=tag)
             PostTag.objects.create(post=post, tag=tag_instance)
