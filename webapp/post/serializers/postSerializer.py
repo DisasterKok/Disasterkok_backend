@@ -38,6 +38,7 @@ class PostSerializer(serializers.ModelSerializer):
         ]
 
     def create(self, validated_data):
+        validated_data['user'] = self.context['request'].user
         tag_set = self.initial_data.getlist('tags')
         post = Post.objects.create(**validated_data)
         img_set = self.context['request'].FILES.getlist('image')
