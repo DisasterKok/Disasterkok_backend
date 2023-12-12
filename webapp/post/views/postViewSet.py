@@ -7,7 +7,7 @@ from rest_framework.response import Response
 from rest_framework.status import HTTP_200_OK
 from rest_framework.viewsets import ModelViewSet
 
-from post.models import Post
+from post.models import Post, PostTag
 from post.serializers.postSerializer import PostSerializer
 
 
@@ -16,6 +16,27 @@ class PostViewSet(ModelViewSet):
     serializer_class = PostSerializer
     pagination_class = PageNumberPagination
 
+    def list(self, request, *args, **kwargs):
+        queryset = self.filter_queryset(self.get_queryset())
+
+        page = self.paginate_queryset(queryset)
+        if page is not None:
+            serializer = self.get_serializer(page, many=True)
+            for item in serializer.data:
+                post_tags = PostTag.objects.filter(post__id=item['id'])
+                tags = [post_tag.tag.name for post_tag in post_tags]
+                item['tags'] = tags
+            return self.get_paginated_response(serializer.data)
+
+        serializer = self.get_serializer(queryset, many=True)
+        data = serializer.data
+        for item in data:
+            post_tags = PostTag.objects.filter(post__id=item['id'])
+            tags = [post_tag.tag.name for post_tag in post_tags]
+            item['tags'] = tags
+
+        return Response(data)
+
     def retrieve(self, request, pk=None):
         post = get_object_or_404(self.get_queryset(), pk=pk)
 
@@ -23,7 +44,13 @@ class PostViewSet(ModelViewSet):
         expires = timezone.now() + datetime.timedelta(days=1)
 
         serializer = self.get_serializer(post)
-        response = Response(serializer.data, status=HTTP_200_OK)
+        data = serializer.data
+        post_tags = PostTag.objects.filter(post=post)
+        tags = []
+        for post_tag in post_tags:
+            tags.append(post_tag.tag.name)
+        data['tags'] = tags
+        response = Response(data, status=HTTP_200_OK)
 
         # 기존 쿠키에 view 있나 확인
         if 'view' in request.COOKIES:
