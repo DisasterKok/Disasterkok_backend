@@ -1,16 +1,14 @@
 from post.models import Post
 from post.serializers import PostSerializer
 
-from rest_framework.views import APIView
+from rest_framework.generics import ListAPIView
 from rest_framework.response import Response
-from rest_framework import status
+from rest_framework import status, pagination
 
-class PostListAPIView(APIView):
-    # 게시글 목록 조회
-    def get(self, request):
-        posts = Post.objects.all()
-        serializer = PostSerializer(posts, many=True)
-        return Response(serializer.data, status=status.HTTP_200_OK)
+class PostListAPIView(ListAPIView):
+    queryset = Post.objects.all()
+    serializer_class = PostSerializer
+    pagination_class = pagination.PageNumberPagination
 
     # 게시글 작성
     def post(self, request):
