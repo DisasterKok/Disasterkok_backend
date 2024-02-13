@@ -39,9 +39,19 @@ class PostSerializer(serializers.ModelSerializer):
 
     def create(self, validated_data):
         validated_data['user'] = self.context['request'].user
-        tag_set = self.initial_data.getlist('tags')
+        # tag_set = self.initial_data.getlist('tags')
+
+        tag_set = self.initial_data.get('tags', [])
+        tag_set = list(tag_set) if tag_set else []
+
+
         post = Post.objects.create(**validated_data)
-        img_set = self.context['request'].FILES.getlist('image')
+
+
+        # img_set = self.context['request'].FILES.getlist('image')
+        img_set = self.context['request'].FILES.get('image', [])
+        img_set = list(img_set) if img_set else []
+
         for img in img_set:
             PostImage.objects.create(post=post, image=img)
         for tag in tag_set:
