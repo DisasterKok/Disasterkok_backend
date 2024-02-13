@@ -13,12 +13,6 @@ class PostDetailAPIView(APIView):
     def get_object(self, post_id):
         return get_object_or_404(Post, id=post_id)
 
-    # def get_object(self, post_id):
-    #     try:
-    #         return Post.objects.get(id=post_id)
-    #     except Post.DoesNotExist:
-    #         return Response(status=status.HTTP_404_NOT_FOUND)
-
     # 게시글 상세 조회
     def get(self, request, post_id):
         post = self.get_object(post_id)
