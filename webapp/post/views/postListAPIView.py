@@ -1,4 +1,4 @@
-from post.models import Post, Tag, PostTag
+from post.models import Post, Tag, PostTag, PostImage
 from post.serializers import PostSerializer
 
 from rest_framework.generics import ListAPIView
@@ -41,6 +41,13 @@ class PostListAPIView(ListAPIView):
             try:
                 with transaction.atomic():
                     post = serializer.save()
+
+                    # 이미지 생성
+                    img_set = request.FILES.get('image', [])
+                    img_set = list(img_set) if img_set else []
+
+                    for img in img_set:
+                        PostImage.objects.create(post=post, image=img)
 
                     # 태그 생성
                     tag_set = request.data.get('write_tags', [])
