@@ -33,7 +33,6 @@ class PostDetailAPIView(APIView):
         if 'view' in request.COOKIES:
             cookies = request.COOKIES['view']
             cookies_list = cookies.split('|')
-            print(cookies_list)
 
             # 기존 쿠키 리스트에 정보가 없으면 조회수 1 증가
             if str(post_id) not in cookies_list:
